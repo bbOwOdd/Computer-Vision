@@ -1,6 +1,6 @@
 """
 YOLOv8 推論/測試腳本
-使用方法: python .\scripts\predict.py --model results\train\weights\best.pt --source datasets\vehicle\TrafficPolice.mp4 --save --show --save-txt --save-conf
+使用方法: python .\script\predict.py --model result\train\weights\best.pt --source dataset\vehicle\TrafficPolice.mp4 --save --show --save-txt --save-conf
 """
 
 import argparse
