@@ -1,6 +1,6 @@
 """
 YOLOv8 訓練腳本
-使用方法: python .\scripts\train.py --model models/yolov8s.pt --epochs 20 --batch-size 16 --data datasets\vehicle\dataset.yaml
+使用方法: python .\script\train.py --model model/yolov8s.pt --epochs 20 --batch-size 16 --data dataset\vehicle\dataset.yaml
 """
 
 import argparse
@@ -13,9 +13,9 @@ import torch
 def parse_args():
     """解析命令行參數"""
     parser = argparse.ArgumentParser(description='YOLOv8 Training Script')
-    parser.add_argument('--data', type=str, default='datasets/vehicle/dataset.yaml', 
+    parser.add_argument('--data', type=str, default='dataset/vehicle/dataset.yaml', 
                        help='資料集配置檔案路徑')
-    parser.add_argument('--model', type=str, default='models/yolov8s.pt', 
+    parser.add_argument('--model', type=str, default='model/yolov8s.pt', 
                        help='預訓練模型 (yolov8n.pt, yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt)')
     parser.add_argument('--epochs', type=int, default=100, 
                        help='訓練週期數')
