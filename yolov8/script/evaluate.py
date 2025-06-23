@@ -1,6 +1,6 @@
 """
 YOLOv8 模型評估腳本
-使用方法: python .\scripts\evaluate.py --model results\train\weights\best.pt --data datasets\vehicle\dataset.yaml --save-json --plots
+使用方法: python .\script\evaluate.py --model result\train\weights\best.pt --data dataset\vehicle\dataset.yaml --save-json --plots
 """
 
 import argparse
@@ -13,7 +13,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='YOLOv8 Evaluation Script')
     parser.add_argument('--model', type=str, required=True,
                        help='訓練好的模型路徑 (.pt 檔案)')
-    parser.add_argument('--data', type=str, default='datasets/vehicle/dataset.yaml',
+    parser.add_argument('--data', type=str, default='dataset/vehicle/dataset.yaml',
                        help='資料集配置檔案路徑')
     parser.add_argument('--split', type=str, default='val',
                        choices=['train', 'val', 'test'],
