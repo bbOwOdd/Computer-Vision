@@ -1,0 +1,12 @@
+# YOLOv8 資料集配置
+# 訓練和驗證資料的路徑
+path: ./datasets/vehicle  # 資料集根目錄
+train: train/images  # 訓練圖片相對路徑 (相對於 'path')
+val: val/images  # 驗證圖片相對路徑 (相對於 'path')
+test: test/images  # 測試圖片相對路徑 (相對於 'path')
+
+nc: 5
+names: ['Ambulance', 'Bus', 'Car', 'Motorcycle', 'Truck']
+
+#roboflow:
+  #url: https://universe.roboflow.com/roboflow-gw7yv/vehicles-openimages/dataset/1
