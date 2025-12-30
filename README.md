@@ -4,5 +4,5 @@ Course labs & projectd either from National Taipei University of Technology or C
 ## 2025-Fall-CTH-CV
 Developd yolov8 to detect vehicle motion on the highway.
 
-## Lab2-Apartments
+## 2025-Spring-NTUT-AI&Security
 Introduced 2D & 3D image calibration and reconstruction from camera points.
