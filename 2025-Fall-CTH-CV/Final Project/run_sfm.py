@@ -4,7 +4,7 @@ import cv2
 import matplotlib.pyplot as plt
 from project_helpers import get_dataset_info, correct_H_sign, homography_to_RT
 import os
-
+from pathlib import Path
 
 # ----------------------------
 # Plotting
@@ -12,7 +12,6 @@ import os
 def camera_center(R, t):
     # C = -R^T t
     return (-R.T @ t).reshape(3)
-
 
 def plot_map_and_cameras(map_X, R_abs, t_abs, title="SfM reconstruction", save_path=None, show=False):
     fig = plt.figure()
@@ -36,11 +35,48 @@ def plot_map_and_cameras(map_X, R_abs, t_abs, title="SfM reconstruction", save_p
     if save_path is not None:
         fig.savefig(save_path, dpi=200, bbox_inches="tight")
 
-    if show:
-        plt.show()
+def plot_zoom_percentile(map_X, R_abs, t_abs, dataset, save_dir="figures",
+                         p_lo=5, p_hi=95, show=False):
+    """
+    map_X: (3,N)
+    p_lo/p_hi: percentiles used to set zoom window (e.g., 5..95).
+    """
+    save_dir = Path(save_dir)
+    save_dir.mkdir(parents=True, exist_ok=True)
 
-    plt.close(fig)
+    X = map_X
+    lo = np.percentile(X, p_lo, axis=1)   # (3,)
+    hi = np.percentile(X, p_hi, axis=1)   # (3,)
 
+    # Optional: only plot points inside the window (cleaner)
+    mask = np.all((X.T >= lo) & (X.T <= hi), axis=1)
+    Xz = X[:, mask]
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    ax.scatter(Xz[0], Xz[1], Xz[2], s=2)
+
+    # plot camera centers too (may be outside limits; still helpful)
+    Cs = []
+    for i in range(len(t_abs)):
+        if t_abs[i] is None:
+            continue
+        C = (-R_abs[i].T @ t_abs[i]).reshape(3)
+        Cs.append(C)
+    if len(Cs) > 0:
+        Cs = np.asarray(Cs)
+        ax.scatter(Cs[:, 0], Cs[:, 1], Cs[:, 2], s=40)
+
+    # Set zoomed axis limits
+    ax.set_xlim(lo[0], hi[0])
+    ax.set_ylim(lo[1], hi[1])
+    ax.set_zlim(lo[2], hi[2])  # 3D limit setter exists for Axes3D [web:23]
+
+    ax.set_title(f"SfM dataset {dataset} zoom ({p_lo}-{p_hi} pct)")
+    ax.set_xlabel("X"); ax.set_ylabel("Y"); ax.set_zlabel("Z")
+
+    out = save_dir / f"sfm_dataset_{dataset}_zoom_{p_lo}_{p_hi}.png"
+    fig.savefig(out, dpi=200, bbox_inches="tight")
 
 # ----------------------------
 # Basic linear algebra helpers
@@ -439,13 +475,15 @@ def run_sfm(dataset: int, plot: bool = True):
     # --- Plot ---
     if plot:
         os.makedirs("figures", exist_ok=True)
+        '''
         plot_map_and_cameras(
             map_X, R_abs, t_abs, 
             title=f"SfM dataset {dataset}",                             
             save_path=f"figures/sfm_dataset_{dataset}.png",
             show=False
         )
-
+        '''
+        plot_zoom_percentile(map_X, R_abs, t_abs, dataset=args.dataset, p_lo=5, p_hi=95, show=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
